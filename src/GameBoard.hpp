@@ -29,8 +29,11 @@ class Gameboard{
 
         bool validateCoordStr(std::string input);
         unsigned int getVictor();
+        unsigned int determineVictor();
         void changeTurn();
-        
+        unsigned int getTurnNumber();
+        void toggleSimpleGrid(){simple_grid=!simple_grid;}
+
     private:
         unsigned int width, height, victor=0, turn_holder=0, turn=1, player_number=2;
         /* 
@@ -38,6 +41,7 @@ class Gameboard{
             turn_holder key: 0=p1, 1=p2
             turn: the total number of turns in the current round
         */
+        bool simple_grid = false;
         std::vector<std::vector<char>> mark_arr;
 };
 Gameboard::Gameboard(unsigned int width, unsigned int height){
@@ -79,15 +83,26 @@ void Gameboard::handleInput(){
 void Gameboard::draw(unsigned int vertical_offset=0){
     for(int i=0; i<vertical_offset; i++) std::cout << '\n';
 
-    std::cout << "It's Player " << turn_holder+1 << "'s turn!\n";
+    std::cout << "Turn " << turn << ": It's Player " << turn_holder+1 << "'s turn!\n";
+
+    if(!simple_grid){
+        std::cout << "  ";
+        for(int collumn=0; collumn<width; collumn++){
+            std::cout << collumn+1;
+            if(collumn < width-1) std::cout << ' ';
+        }
+        std::cout << '\n';
+    }
 
     for(int row=0; row<height; row++){
+        if(!simple_grid) std::cout << row+1 << " ";
         for(int collumn=0; collumn<width; collumn++){
             std::cout << mark_arr[row][collumn];
             if(collumn < width-1) std::cout << '|';
         }
         std::cout << '\n';
         if(row<height-1){
+            if(!simple_grid) std::cout << "  ";
             for(int collumn=0; collumn < (width*2)-1; collumn++){
                 std::cout<<'-';
             }
@@ -117,10 +132,61 @@ unsigned int Gameboard::getVictor(){
     return victor;
 }
 
+unsigned int Gameboard::determineVictor(){
+    megatato_debug::print("determining victory...");
+
+    unsigned int result = Gameboard::GAME_ONGOING;
+
+    int mark_streak_row = 0, blank_mark_tally = 0, dr_diag_tally=0, ul_diag_tally=0, collumn_same_mark_presence_arr[mark_arr[0].size()] = {0,0,0};
+
+    for(int player=0; player<player_number && result==0; player++){
+        for(int row=0; row<mark_arr.size(); row++){
+            for(int collumn=0; collumn<mark_arr[row].size(); collumn++){
+                if(mark_arr[row][collumn] == PLAYER_MARKS[player]){
+                    mark_streak_row++;
+                    collumn_same_mark_presence_arr[collumn]++;
+                    if(row == collumn) dr_diag_tally++;
+                    if((collumn == 0 && row == 2) || (collumn == 1 && row == 1) || (collumn == 2 && row == 0)){
+                        ul_diag_tally++;
+                    }
+                }
+                else if(mark_arr[row][collumn] == BLANK_MARK) blank_mark_tally++;
+            }
+            if(mark_streak_row > 2 || dr_diag_tally > 2 || ul_diag_tally > 2){
+                result = player+1;
+                megatato_debug::print("Streak found!");
+            }
+
+            mark_streak_row = 0;
+        }
+        for(int collumn_mark_tally_arr_i=0; collumn_mark_tally_arr_i < mark_arr[0].size(); collumn_mark_tally_arr_i++){
+            if(collumn_same_mark_presence_arr[collumn_mark_tally_arr_i] > 2){
+                result = player+1;
+                megatato_debug::print("Vertical streak found!");
+            }
+        }
+        collumn_same_mark_presence_arr[0] = 0;
+        collumn_same_mark_presence_arr[1] = 0;
+        collumn_same_mark_presence_arr[2] = 0;
+
+        dr_diag_tally = 0;
+        ul_diag_tally = 0;
+    }
+
+    if(result==Gameboard::GAME_ONGOING && blank_mark_tally==0) result = Gameboard::STALEMATE;
+
+    victor = result;
+    return result;
+}
+
 void Gameboard::changeTurn(){
     turn++;
     if(turn_holder+1 >= player_number) turn_holder = 0;
     else turn_holder++;
+}
+
+unsigned int Gameboard::getTurnNumber(){
+    return turn;
 }
 
 #endif
