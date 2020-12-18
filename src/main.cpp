@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "GameBoard.hpp"
+#include "Gameboard.hpp"
 
 int main(int argc, char* argv[]){
 

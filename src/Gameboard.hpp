@@ -4,19 +4,24 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <memory>
+
+#include "Coord.hpp"
+#include "validators.hpp"
+#include "player.hpp"
 
 #include "../../megatato_debug_api/headers/megatato_debug_api.hpp"
 
 class Gameboard{
     public:
-        const static unsigned int \
+       constexpr static unsigned int \
             GAME_ONGOING = 0,
             P1_VICTORY = 1,
             P2_VICTORY = 2, 
             STALEMATE = 3
         ;
 
-        const char \
+        constexpr static char \
             BLANK_MARK = ' ',
             PLAYER_MARKS[2] = {'X','O'}
         ;
@@ -27,12 +32,13 @@ class Gameboard{
 
         void draw(unsigned int vertical_offset=0);
 
-        bool validateCoordStr(std::string input);
         unsigned int getVictor();
         unsigned int determineVictor();
         unsigned int getTurnNumber();
         void toggleSimpleGrid();
         void changeTurn();
+        void forceVictor(unsigned int n);
+        char findMark(unsigned int x, unsigned int y);
 
     private:
         unsigned int width, height, victor=0, turn_holder=0, turn=1, player_number=2;
@@ -43,6 +49,7 @@ class Gameboard{
         */
         bool simple_grid = false;
         std::vector<std::vector<char>> mark_arr;
+        std::vector<std::unique_ptr<IPlayer>> players;
 };
 
 #endif
