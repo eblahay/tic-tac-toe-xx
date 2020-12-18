@@ -1,6 +1,7 @@
-#include "GameBoard.hpp"
+#include "Gameboard.hpp"
 
 Gameboard::Gameboard(unsigned int width, unsigned int height){
+    //intializing mark_arr
     this->width = width;
     this->height = height;
 
@@ -12,28 +13,19 @@ Gameboard::Gameboard(unsigned int width, unsigned int height){
         mark_arr.push_back(row);
     }
 
+    //adding players
+    players.push_back(std::make_unique<HumanPlayer>(this));
+    players.push_back(std::make_unique<HumanPlayer>(this));
+
     megatato_debug::print("Gameboard has been initialized.");
 }
 
 void Gameboard::handleInput(){
-    std::string e;
-    std::getline(std::cin, e);
+    Coord des_space = players[turn_holder]->pickDesCoord();
 
-    unsigned int x, y;
-    
-    megatato_debug::setBoolAlpha();
-    if(validateCoordStr(e)){
-        x = std::stoi(e.substr(0, e.find(',')));
-        y = std::stoi(e.substr(e.find(',')+1));
+    mark_arr[des_space.y()-1][des_space.x()-1] = PLAYER_MARKS[turn_holder];
+    changeTurn();
 
-        if(mark_arr[y-1][x-1]==BLANK_MARK){
-            mark_arr[y-1][x-1] = PLAYER_MARKS[turn_holder];
-            changeTurn();
-        }
-        else std::cout << "Space Taken!\n";
-    }
-    else if(e == "/end") victor = 3;
-    else std::cout << "Invalid Input\n";
 }
 
 void Gameboard::draw(unsigned int vertical_offset){
@@ -65,23 +57,6 @@ void Gameboard::draw(unsigned int vertical_offset){
             std::cout << '\n';
         }
     }
-}
-
-bool Gameboard::validateCoordStr(std::string input){
-    bool result = false;
-
-    if(input.find(',') != std::string::npos){
-        try{
-            int x = std::stoi(input.substr(0, input.find(','))), y = std::stoi(input.substr(input.find(',')+1));
-            result = true;
-        }
-        catch(std::exception e){
-            result = false;
-            megatato_debug::print("There was an exception during CoordStr validation.");
-        }
-    }
-
-    return result;
 }
 
 unsigned int Gameboard::getVictor(){
@@ -150,4 +125,12 @@ void Gameboard::changeTurn(){
 
 unsigned int Gameboard::getTurnNumber(){
     return turn;
+}
+
+void Gameboard::forceVictor(unsigned int n){
+    victor = n;
+}
+
+char Gameboard::findMark(unsigned int x, unsigned int y){
+    return mark_arr[y][x];
 }
