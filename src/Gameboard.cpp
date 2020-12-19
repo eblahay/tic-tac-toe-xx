@@ -1,5 +1,7 @@
 #include "Gameboard.hpp"
 
+#include <exception>
+
 Gameboard::Gameboard(unsigned int width, unsigned int height){
     //intializing mark_arr
     this->width = width;
@@ -21,7 +23,18 @@ Gameboard::Gameboard(unsigned int width, unsigned int height){
 }
 
 void Gameboard::handleInput(){
-    Coord des_space = players[turn_holder]->pickDesCoord();
+    Coord des_space(0,0);
+
+    bool collected_coord=false;
+    while(!collected_coord){
+        try{
+            des_space = players[turn_holder]->pickDesCoord();
+            collected_coord = true;
+        }
+        catch(std::runtime_error err){
+            collected_coord = false;
+        }
+    }
 
     mark_arr[des_space.y()-1][des_space.x()-1] = PLAYER_MARKS[turn_holder];
     changeTurn();

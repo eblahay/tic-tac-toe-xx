@@ -1,5 +1,6 @@
 #include "player.hpp"
 
+#include <exception>
 #include "Gameboard.hpp"
 
 //HumanPlayer
@@ -20,10 +21,16 @@ Coord HumanPlayer::pickDesCoord(){
         y = std::stoi(e.substr(e.find(',')+1));
 
         if(gameboard->findMark(x-1, y-1) == Gameboard::BLANK_MARK);
-        else std::cout << "Space Taken!\n";
+        else{
+            std::cout << "Space Taken!\n";
+            throw std::runtime_error("Invalid Input");
+        }
     }
     else if(e == "/end") gameboard->forceVictor(3);
-    else std::cout << "Invalid Input\n";
+    else{
+        std::cout << "Invalid Input\n";
+        throw std::runtime_error("Invalid Input");
+    }
 
     return Coord(x, y);
 }
