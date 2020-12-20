@@ -10,7 +10,6 @@ bool validators::inputCoordValidator(std::string input){
         }
         catch(std::exception e){
             result = false;
-            megatato_debug::print("There was an exception during CoordStr validation.");
         }
     }
 

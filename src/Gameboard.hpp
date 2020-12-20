@@ -10,7 +10,6 @@
 #include "validators.hpp"
 #include "player.hpp"
 
-#include "../../megatato_debug_api/headers/megatato_debug_api.hpp"
 
 class Gameboard{
     public:
@@ -38,7 +37,7 @@ class Gameboard{
         void toggleSimpleGrid();
         void changeTurn();
         void forceVictor(unsigned int n);
-        char findMark(unsigned int x, unsigned int y);
+        char findMark(int x, int y);
 
     private:
         unsigned int width, height, victor=0, turn_holder=0, turn=1, player_number=2;
