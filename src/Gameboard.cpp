@@ -18,8 +18,6 @@ Gameboard::Gameboard(unsigned int width, unsigned int height){
     //adding players
     players.push_back(std::make_unique<HumanPlayer>(this));
     players.push_back(std::make_unique<HumanPlayer>(this));
-
-    megatato_debug::print("Gameboard has been initialized.");
 }
 
 void Gameboard::handleInput(){
@@ -29,10 +27,15 @@ void Gameboard::handleInput(){
     while(!collected_coord){
         try{
             des_space = players[turn_holder]->pickDesCoord();
-            collected_coord = true;
+
+            std::cout << "Coord: " << des_space.x() << ',' << des_space.y() <<'\n';
+
+            if((des_space.y() < 0 || des_space.y() >= mark_arr.size()) || (des_space.x() < 0 || des_space.x() >= mark_arr[0].size()));
+            else collected_coord = true;
+            
         }
         catch(std::runtime_error err){
-            collected_coord = false;
+            
         }
     }
 
@@ -77,7 +80,7 @@ unsigned int Gameboard::getVictor(){
 }
 
 unsigned int Gameboard::determineVictor(){
-    megatato_debug::print("determining victory...");
+    
 
     unsigned int result = Gameboard::GAME_ONGOING;
 
@@ -101,7 +104,7 @@ unsigned int Gameboard::determineVictor(){
             }
             if(mark_streak_row > 2 || dr_diag_tally > 2 || ul_diag_tally > 2){
                 result = player+1;
-                megatato_debug::print("Streak found!");
+                
             }
 
             mark_streak_row = 0;
@@ -109,7 +112,7 @@ unsigned int Gameboard::determineVictor(){
         for(int collumn_mark_tally_arr_i=0; collumn_mark_tally_arr_i < mark_arr[0].size(); collumn_mark_tally_arr_i++){
             if(collumn_same_mark_presence_arr[collumn_mark_tally_arr_i] > 2){
                 result = player+1;
-                megatato_debug::print("Vertical streak found!");
+                
             }
         }
         collumn_same_mark_presence_arr[0] = 0;
@@ -144,6 +147,6 @@ void Gameboard::forceVictor(unsigned int n){
     victor = n;
 }
 
-char Gameboard::findMark(unsigned int x, unsigned int y){
+char Gameboard::findMark(int x, int y){
     return mark_arr[y][x];
 }

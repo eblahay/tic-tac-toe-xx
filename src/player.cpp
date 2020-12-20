@@ -13,12 +13,14 @@ Coord HumanPlayer::pickDesCoord(){
     std::string e;
     std::getline(std::cin, e);
 
-    unsigned int x, y;
+    int x, y;
     
     megatato_debug::setBoolAlpha();
     if(validators::inputCoordValidator(e)){
         x = std::stoi(e.substr(0, e.find(',')));
         y = std::stoi(e.substr(e.find(',')+1));
+
+        std::cout << "x: " << x << ", y: " << y <<'\n';
 
         if(gameboard->findMark(x-1, y-1) == Gameboard::BLANK_MARK);
         else{

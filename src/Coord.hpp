@@ -3,12 +3,12 @@
 
 class Coord{
     public:
-        Coord(unsigned int x, unsigned int y);
+        Coord(int x, int y);
 
-        unsigned int x();
-        unsigned int y();
+        int x();
+        int y();
     private:
-    unsigned int x_var, y_var;
+        int x_var, y_var;
 };
 
 #endif
