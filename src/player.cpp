@@ -15,7 +15,6 @@ Coord HumanPlayer::pickDesCoord(){
 
     int x, y;
     
-    megatato_debug::setBoolAlpha();
     if(validators::inputCoordValidator(e)){
         x = std::stoi(e.substr(0, e.find(',')));
         y = std::stoi(e.substr(e.find(',')+1));
