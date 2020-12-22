@@ -1,39 +1,47 @@
 #include "player.hpp"
 
 #include <exception>
+
 #include "Gameboard.hpp"
+#include "validators.hpp"
+
+//PlayerBase
+PlayerBase::PlayerBase(Gameboard* gameboard):
+    gameboard(gameboard),
+    mark('?')
+{
+    
+}
+
+void PlayerBase::setMark(char mark){
+    this->mark = mark;
+}
+
+char PlayerBase::getMark(){
+    return mark;
+}
 
 //HumanPlayer
 
-HumanPlayer::HumanPlayer(Gameboard* gameboard): IPlayer::IPlayer(gameboard){
+HumanPlayer::HumanPlayer(Gameboard* gameboard): PlayerBase::PlayerBase(gameboard){
     
 }
 
 Coord HumanPlayer::pickDesCoord(){
+    Coord result;
+
     std::string e;
     std::getline(std::cin, e);
 
-    int x, y;
-    
     if(validators::inputCoordValidator(e)){
-        x = std::stoi(e.substr(0, e.find(',')));
-        y = std::stoi(e.substr(e.find(',')+1));
-
-        std::cout << "x: " << x << ", y: " << y <<'\n';
-
-        if(gameboard->findMark(x-1, y-1) == Gameboard::BLANK_MARK);
-        else{
-            std::cout << "Space Taken!\n";
-            throw std::runtime_error("Invalid Input");
-        }
+        result.setX(std::stoi(e.substr(0, e.find(','))) - 1);
+        result.setY(gameboard->getBoardHeight() - std::stoi(e.substr(e.find(',')+1)));
     }
-    else if(e == "/end") gameboard->forceVictor(3);
     else{
-        std::cout << "Invalid Input\n";
         throw std::runtime_error("Invalid Input");
     }
 
-    return Coord(x, y);
+    return result;
 }
 
 bool HumanPlayer::isCpu(){
@@ -42,7 +50,7 @@ bool HumanPlayer::isCpu(){
 
 //CpuPlayer
 
-CpuPlayer::CpuPlayer(Gameboard* gameboard): IPlayer::IPlayer(gameboard){
+CpuPlayer::CpuPlayer(Gameboard* gameboard): PlayerBase::PlayerBase(gameboard){
     
 }
 

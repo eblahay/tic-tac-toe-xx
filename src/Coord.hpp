@@ -3,12 +3,16 @@
 
 class Coord{
     public:
-        Coord(int x, int y);
+        Coord(int x=0, int y=0);
 
-        int x();
-        int y();
+        void setX(int x);
+        void setY(int y);
+
+        int x() const ;
+        int y() const ;
+
     private:
-        int x_var, y_var;
+        int _x, _y;
 };
 
 #endif

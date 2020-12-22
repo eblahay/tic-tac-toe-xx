@@ -1,14 +1,23 @@
 #include "Coord.hpp"
 
-Coord::Coord(int x, int y){
-    x_var = x;
-    y_var = y;
+Coord::Coord(int x, int y):
+    _x(x),
+    _y(y)
+{
 }
 
-int Coord::x(){
-    return x_var;
+int Coord::x() const {
+    return _x;
 }
 
-int Coord::y(){
-    return y_var;
+int Coord::y() const {
+    return _y;
+}
+
+void Coord::setX(int x){
+    _x = x;
+}
+
+void Coord::setY(int y){
+    _y = y;
 }

@@ -1,0 +1,9 @@
+G A M E  D E S I G N  D O C U M E N T
+Proj_name: Tic-Tac-Toe++
+Author: Megatato
+
+summary:
+   A text-based console game of tic-tac-toe in which the user inputs
+   coordinates and their mark appears on the board in the corresponding
+   location. There will also be a singleplayer mode in which a human player
+   will face off with a cpu opponent.
