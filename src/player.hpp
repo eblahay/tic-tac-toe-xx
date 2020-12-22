@@ -5,25 +5,27 @@
 
 #include "Coord.hpp"
 
-//forward decl for the sake of allow ptr to it in IPlayer
+//forward decl to allow ptr to it in PlayerBase
 class Gameboard;
 //
 
-class IPlayer{
+class PlayerBase{
     public:
-        IPlayer(Gameboard* gameboard){
-            this->gameboard = gameboard;
-        }
-        //virtual ~IPlayer() = 0;
+        PlayerBase(Gameboard* gameboard);
 
         virtual Coord pickDesCoord() = 0;
 
         virtual bool isCpu() = 0;
-    protected:
-        Gameboard* gameboard;
+
+        void setMark(char mark);
+
+        char getMark();
+ protected:
+        const Gameboard* gameboard;
+        char mark;
 };
 
-class HumanPlayer: public IPlayer{
+class HumanPlayer: public PlayerBase{
     public:
         HumanPlayer(Gameboard* gameboard);
         
@@ -32,7 +34,7 @@ class HumanPlayer: public IPlayer{
         bool isCpu();
 };
 
-class CpuPlayer: public IPlayer{
+class CpuPlayer: public PlayerBase{
     public:
         CpuPlayer(Gameboard* gameboard);
         

@@ -1,152 +1,124 @@
 #include "Gameboard.hpp"
 
-#include <exception>
-
-Gameboard::Gameboard(unsigned int width, unsigned int height){
-    //intializing mark_arr
-    this->width = width;
-    this->height = height;
-
-    for(int i=0; i<height; i++){
+Gameboard::Gameboard(std::vector<char> theme):
+    BOARD_WIDTH(3),
+    BOARD_HEIGHT(3),
+    MARKS(theme)
+{
+    //intialize board
+    for(int row_i=0; row_i<BOARD_HEIGHT; row_i++){
         std::vector<char> row;
-        for(int j=0; j<width; j++){
-            row.push_back(BLANK_MARK);
+        for(int collumn_i=0; collumn_i<BOARD_WIDTH; collumn_i++){
+            row.push_back(MARKS[0]);
         }
-        mark_arr.push_back(row);
+        board.push_back(row);
     }
 
-    //adding players
-    players.push_back(std::make_unique<HumanPlayer>(this));
-    players.push_back(std::make_unique<HumanPlayer>(this));
-}
-
-void Gameboard::handleInput(){
-    Coord des_space(0,0);
-
-    bool collected_coord=false;
-    while(!collected_coord){
-        try{
-            des_space = players[turn_holder]->pickDesCoord();
-
-            std::cout << "Coord: " << des_space.x() << ',' << des_space.y() <<'\n';
-
-            if((des_space.y() < 0 || des_space.y() >= mark_arr.size()) || (des_space.x() < 0 || des_space.x() >= mark_arr[0].size()));
-            else collected_coord = true;
-            
-        }
-        catch(std::runtime_error err){
-            
-        }
+    //load players
+    for(int i=0; i < 2; i++){
+        players.push_back(std::make_unique<HumanPlayer>(this));
+        players[i]->setMark(MARKS[i+1]);
     }
 
-    mark_arr[des_space.y()-1][des_space.x()-1] = PLAYER_MARKS[turn_holder];
-    changeTurn();
-
-}
-
-void Gameboard::draw(unsigned int vertical_offset){
-    for(int i=0; i<vertical_offset; i++) std::cout << '\n';
-
-    std::cout << "Turn " << turn << ": It's Player " << turn_holder+1 << "'s turn!\n";
-
-    if(!simple_grid){
-        std::cout << "  ";
-        for(int collumn=0; collumn<width; collumn++){
-            std::cout << collumn+1;
-            if(collumn < width-1) std::cout << ' ';
-        }
-        std::cout << '\n';
-    }
-
-    for(int row=0; row<height; row++){
-        if(!simple_grid) std::cout << row+1 << " ";
-        for(int collumn=0; collumn<width; collumn++){
-            std::cout << mark_arr[row][collumn];
-            if(collumn < width-1) std::cout << '|';
-        }
-        std::cout << '\n';
-        if(row<height-1){
-            if(!simple_grid) std::cout << "  ";
-            for(int collumn=0; collumn < (width*2)-1; collumn++){
-                std::cout<<'-';
-            }
-            std::cout << '\n';
-        }
-    }
-}
-
-unsigned int Gameboard::getVictor(){
-    return victor;
-}
-
-unsigned int Gameboard::determineVictor(){
-    
-
-    unsigned int result = Gameboard::GAME_ONGOING;
-
-    int mark_streak_row = 0, blank_mark_tally = 0, dr_diag_tally=0, ul_diag_tally=0, collumn_same_mark_presence_arr[mark_arr[0].size()] = {0,0,0};
-
-    for(int player=0; player<player_number && result==0; player++){
-        for(int row=0; row<mark_arr.size(); row++){
-            for(int collumn=0; collumn<mark_arr[row].size(); collumn++){
-                if(mark_arr[row][collumn] == PLAYER_MARKS[player]){
-                    mark_streak_row++;
-                    collumn_same_mark_presence_arr[collumn]++;
-                    if(row == collumn){
-                        dr_diag_tally++;
-                        if(collumn == 1) ul_diag_tally++;
-                    }
-                    else if((collumn == 0 && row == 2) || (collumn == 2 && row == 0)){
-                        ul_diag_tally++;
-                    }
-                }
-                else if(mark_arr[row][collumn] == BLANK_MARK) blank_mark_tally++;
-            }
-            if(mark_streak_row > 2 || dr_diag_tally > 2 || ul_diag_tally > 2){
-                result = player+1;
-                
-            }
-
-            mark_streak_row = 0;
-        }
-        for(int collumn_mark_tally_arr_i=0; collumn_mark_tally_arr_i < mark_arr[0].size(); collumn_mark_tally_arr_i++){
-            if(collumn_same_mark_presence_arr[collumn_mark_tally_arr_i] > 2){
-                result = player+1;
-                
-            }
-        }
-        collumn_same_mark_presence_arr[0] = 0;
-        collumn_same_mark_presence_arr[1] = 0;
-        collumn_same_mark_presence_arr[2] = 0;
-
-        dr_diag_tally = 0;
-        ul_diag_tally = 0;
-    }
-
-    if(result==Gameboard::GAME_ONGOING && blank_mark_tally==0) result = Gameboard::STALEMATE;
-
-    victor = result;
-    return result;
-}
-
-void Gameboard::toggleSimpleGrid(){
-    simple_grid=!simple_grid;
 }
 
 void Gameboard::changeTurn(){
     turn++;
-    if(turn_holder+1 >= player_number) turn_holder = 0;
-    else turn_holder++;
+    if(turn_holder_index + 1 >= players.size()) turn_holder_index = 0;
+    else turn_holder_index++;
 }
 
-unsigned int Gameboard::getTurnNumber(){
-    return turn;
+void Gameboard::claimSpace(Coord position, int claimant){
+    setMark(position, players[claimant]->getMark());
 }
 
-void Gameboard::forceVictor(unsigned int n){
-    victor = n;
+void Gameboard::drawBoard(){
+    /*
+    a function that draws the board on the screen.
+    */
+
+    std::cout << "It's Player " << turn_holder_index + 1 << "'s turn!\n";
+
+    for(int row=0; row<BOARD_HEIGHT; row++){
+        for(int width=0; width<BOARD_WIDTH; width++){
+            std::cout << getMark(width, row);
+        }
+        std::cout << '\n';
+    }
 }
 
-char Gameboard::findMark(int x, int y){
-    return mark_arr[y][x];
+void Gameboard::handleTurn(){
+    Coord new_claim;
+
+    do{
+        try{
+            new_claim = players[turn_holder_index]->pickDesCoord();
+        }
+        catch(std::runtime_error err){
+            new_claim.setX(-1);
+            new_claim.setY(-1);
+        }
+    }
+    while(
+        (new_claim.x() < 0 || new_claim.y() < 0) ||
+        (new_claim.x() >= BOARD_WIDTH || new_claim.y() >= BOARD_HEIGHT) ||
+        (getMark(new_claim) != MARKS[0])
+    );
+
+    claimSpace(new_claim, turn_holder_index);
+    changeTurn();
+}
+
+int Gameboard::findWinner(){
+    /*
+    function that tries to find if any of the players have met the
+    conditions necessary to win the game.
+    */
+
+    int
+        winner_index = Gameboard::UNDECIDED,// -1 = no_current_winner, -2 = stalemate
+        blank_space_count = 0
+    ;    
+
+    for(int player_index=0; player_index < players.size() && winner_index == Gameboard::UNDECIDED; player_index++){
+        //right-diag win condition check
+        if(this->getMark(0,2) == this->getMark(1,1) && this->getMark(1,1) == this->getMark(2,0) && this->getMark(1,1) == players[player_index]->getMark()) winner_index = player_index;
+        //left-diag win condition check
+        else if(this->getMark(0,0) == this->getMark(1,1) && this->getMark(1,1) == this->getMark(2,2) && this->getMark(1,1) == players[player_index]->getMark()) winner_index = player_index;
+
+        //iterating through board
+        for(int row=0; row < board.size() && winner_index == Gameboard::UNDECIDED ; row++){
+            //horizontal row win condition check
+            if(this->getMark(0,row) == this->getMark(1,row) && this->getMark(1,row) == this->getMark(2,row) && this->getMark(0,row) == players[player_index]->getMark()) winner_index = player_index;
+
+            //iterating through board (collumns in row)
+            for(int collumn=0; collumn < board[row].size() && winner_index == Gameboard::UNDECIDED; collumn++){
+                //vertical collumn win condition check
+                if(this->getMark(collumn,0) == this->getMark(collumn,1) && this->getMark(collumn,1) == this->getMark(collumn,2) && this->getMark(collumn,0) == players[player_index]->getMark()) winner_index = player_index;
+
+                if(this->getMark(collumn,row) == MARKS[0]) blank_space_count++;
+            }          
+        }
+    }
+    if(winner_index == Gameboard::UNDECIDED && blank_space_count == 0) winner_index = Gameboard::STALEMATE;
+
+    return winner_index;
+}
+
+void Gameboard::setMark(Coord position, char mark){
+    board[position.y()][position.x()] = mark;
+}
+
+char Gameboard::getMark(Coord position){
+    return board[position.y()][position.x()];
+}
+char Gameboard::getMark(int x, int y){
+    return board[y][x];
+}
+
+int Gameboard::getBoardWidth() const {
+    return BOARD_WIDTH;
+}
+int Gameboard::getBoardHeight() const {
+    return BOARD_HEIGHT;
 }

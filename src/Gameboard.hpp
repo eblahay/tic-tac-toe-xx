@@ -1,54 +1,49 @@
 #ifndef GAMEBOARD_HPP
 #define GAMEBOARD_HPP
 
-#include <iostream>
 #include <vector>
-#include <string>
 #include <memory>
 
 #include "Coord.hpp"
-#include "validators.hpp"
 #include "player.hpp"
-
 
 class Gameboard{
     public:
-       constexpr static unsigned int \
-            GAME_ONGOING = 0,
-            P1_VICTORY = 1,
-            P2_VICTORY = 2, 
-            STALEMATE = 3
-        ;
+        Gameboard(std::vector<char> theme={'0', '1', '2'});
 
-        constexpr static char \
-            BLANK_MARK = ' ',
-            PLAYER_MARKS[2] = {'X','O'}
-        ;
-
-        Gameboard(unsigned int width = 3, unsigned int height = 3);
-
-        void handleInput();
-
-        void draw(unsigned int vertical_offset=0);
-
-        unsigned int getVictor();
-        unsigned int determineVictor();
-        unsigned int getTurnNumber();
-        void toggleSimpleGrid();
         void changeTurn();
-        void forceVictor(unsigned int n);
-        char findMark(int x, int y);
 
+        void claimSpace(Coord position, int claimant);
+
+        void drawBoard();
+
+        void handleTurn();
+
+        int findWinner();
+
+        //functions that set the value(s) of class members
+        void setMark(Coord position, char mark);
+
+        //functions that return objects
+        char getMark(Coord position);
+        char getMark(int x, int y);
+
+        int getBoardWidth() const ;
+        int getBoardHeight() const ;
+
+        //public non-function class members
+        const std::vector<char> MARKS;
+        constexpr static int
+            UNDECIDED = -1,
+            STALEMATE = -2
+        ;
     private:
-        unsigned int width, height, victor=0, turn_holder=0, turn=1, player_number=2;
-        /* 
-            victor key: 0 = n/a, 1 = p1, 2 = p2, 3 = stalemate/tie
-            turn_holder key: 0=p1, 1=p2
-            turn: the total number of turns in the current round
-        */
-        bool simple_grid = false;
-        std::vector<std::vector<char>> mark_arr;
-        std::vector<std::unique_ptr<IPlayer>> players;
+        const int BOARD_WIDTH, BOARD_HEIGHT;
+
+        std::vector<std::vector<char>> board;
+        std::vector<std::unique_ptr<PlayerBase>> players;
+
+        int turn=0, turn_holder_index=0;
 };
 
 #endif
