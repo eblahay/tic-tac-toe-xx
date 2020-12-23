@@ -120,10 +120,10 @@ void Gameboard::setMark(Coord position, char mark){
     board[position.y()][position.x()] = mark;
 }
 
-char Gameboard::getMark(Coord position){
+char Gameboard::getMark(Coord position) const {
     return board[position.y()][position.x()];
 }
-char Gameboard::getMark(int x, int y){
+char Gameboard::getMark(int x, int y) const {
     return board[y][x];
 }
 

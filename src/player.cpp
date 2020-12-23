@@ -59,6 +59,50 @@ Coord CpuPlayer::pickDesCoord(){
 
     Coord result(rand() % gameboard->getBoardWidth(), rand() % gameboard->getBoardHeight());
 
+    bool deciding=true;
+
+    int
+        foe_col_count = 0,
+        foe_occ_spc_y_vals[2] = {-1,-1},
+        self_col_count = 0,
+        self_occ_spc_y_vals[2] = {-1,-1}
+    ;
+
+    for(int row=0; deciding && row < gameboard->getBoardHeight(); row++){
+        int 
+            foe_row_count = 0,
+            foe_occ_spc_x_vals[2] = {-1,-1},
+            self_row_count = 0,
+            self_occ_spc_x_vals[2] = {-1,-1}
+        ;
+
+        for(int collumn=0; collumn < gameboard->getBoardWidth(); collumn++){
+            if(gameboard->getMark(collumn, row) == this->getMark()){
+                self_occ_spc_x_vals[self_row_count] = collumn;
+                self_row_count++;
+            }
+            else if(gameboard->getMark(collumn, row) != gameboard->MARKS[0] && gameboard->getMark(collumn, row) != this->getMark()){
+                foe_occ_spc_x_vals[foe_row_count] = collumn;
+                foe_row_count++;
+            }
+        }
+
+        if(self_row_count + foe_row_count < gameboard->getBoardWidth()){
+            //change to result is only made if the row isn't full of player marks
+
+            if(self_row_count == 2){
+                result.setX(gameboard->getBoardWidth()-(self_occ_spc_x_vals[0]+self_occ_spc_x_vals[1]));
+                result.setY(row);
+                deciding = false;
+            }
+            else if(foe_row_count == 2){
+                result.setX(gameboard->getBoardWidth()-(foe_occ_spc_x_vals[0]+foe_occ_spc_x_vals[1]));
+                result.setY(row);
+                deciding = false;
+            }
+        }
+    }
+
     return result;
 }
 
