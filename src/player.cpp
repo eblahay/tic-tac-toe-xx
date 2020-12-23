@@ -1,6 +1,7 @@
 #include "player.hpp"
 
 #include <exception>
+#include <stdlib.h>
 
 #include "Gameboard.hpp"
 #include "validators.hpp"
@@ -55,7 +56,10 @@ CpuPlayer::CpuPlayer(Gameboard* gameboard): PlayerBase::PlayerBase(gameboard){
 }
 
 Coord CpuPlayer::pickDesCoord(){
-    return Coord(2,2);
+
+    Coord result(rand() % gameboard->getBoardWidth(), rand() % gameboard->getBoardHeight());
+
+    return result;
 }
 
 bool CpuPlayer::isCpu(){

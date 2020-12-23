@@ -9,7 +9,7 @@
 
 class Gameboard{
     public:
-        Gameboard(std::vector<char> theme={'0', '1', '2'});
+        Gameboard(bool singleplayer=false, std::vector<char> theme={'0', '1', '2'});
 
         void changeTurn();
 
@@ -39,6 +39,7 @@ class Gameboard{
         ;
     private:
         const int BOARD_WIDTH, BOARD_HEIGHT;
+        const bool SINGLEPLAYER;
 
         std::vector<std::vector<char>> board;
         std::vector<std::unique_ptr<PlayerBase>> players;

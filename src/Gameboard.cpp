@@ -1,8 +1,9 @@
 #include "Gameboard.hpp"
 
-Gameboard::Gameboard(std::vector<char> theme):
+Gameboard::Gameboard(bool singleplayer, std::vector<char> theme):
     BOARD_WIDTH(3),
     BOARD_HEIGHT(3),
+    SINGLEPLAYER(singleplayer),
     MARKS(theme)
 {
     //intialize board
@@ -15,8 +16,18 @@ Gameboard::Gameboard(std::vector<char> theme):
     }
 
     //load players
-    for(int i=0; i < 2; i++){
+    int human_player_qty = 2, cpu_player_qty=0;
+    if(singleplayer){
+        human_player_qty = 1;
+        cpu_player_qty = 1;
+    }
+
+    for(int i=0; i < human_player_qty; i++){
         players.push_back(std::make_unique<HumanPlayer>(this));
+        players[i]->setMark(MARKS[i+1]);
+    }
+    for(int i=human_player_qty; i < human_player_qty+cpu_player_qty; i++){
+        players.push_back(std::make_unique<CpuPlayer>(this));
         players[i]->setMark(MARKS[i+1]);
     }
 
