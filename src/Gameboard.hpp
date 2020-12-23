@@ -25,8 +25,8 @@ class Gameboard{
         void setMark(Coord position, char mark);
 
         //functions that return objects
-        char getMark(Coord position);
-        char getMark(int x, int y);
+        char getMark(Coord position) const ;
+        char getMark(int x, int y) const ;
 
         int getBoardWidth() const ;
         int getBoardHeight() const ;
