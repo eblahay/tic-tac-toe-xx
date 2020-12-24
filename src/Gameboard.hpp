@@ -31,6 +31,12 @@ class Gameboard{
         int getBoardWidth() const ;
         int getBoardHeight() const ;
 
+        Coord getLatestMove() const ;
+
+        int getPriorTurnHolderIndex() const ;
+
+        int getCurrentTurn() const ;
+
         //public non-function class members
         const std::vector<char> MARKS;
         constexpr static int
@@ -40,6 +46,8 @@ class Gameboard{
     private:
         const int BOARD_WIDTH, BOARD_HEIGHT;
         const bool SINGLEPLAYER;
+
+        Coord latest_move;
 
         std::vector<std::vector<char>> board;
         std::vector<std::unique_ptr<PlayerBase>> players;
