@@ -41,6 +41,8 @@ void Gameboard::changeTurn(){
 
 void Gameboard::claimSpace(Coord position, int claimant){
     setMark(position, players[claimant]->getMark());
+
+    latest_move = position;
 }
 
 void Gameboard::drawBoard(){
@@ -87,31 +89,24 @@ int Gameboard::findWinner(){
     */
 
     int
-        winner_index = Gameboard::UNDECIDED,// -1 = no_current_winner, -2 = stalemate
-        blank_space_count = 0
+        winner_index = Gameboard::UNDECIDED// -1 = no_current_winner, -2 = stalemate
     ;    
 
-    for(int player_index=0; player_index < players.size() && winner_index == Gameboard::UNDECIDED; player_index++){
-        //right-diag win condition check
-        if(this->getMark(0,2) == this->getMark(1,1) && this->getMark(1,1) == this->getMark(2,0) && this->getMark(1,1) == players[player_index]->getMark()) winner_index = player_index;
-        //left-diag win condition check
-        else if(this->getMark(0,0) == this->getMark(1,1) && this->getMark(1,1) == this->getMark(2,2) && this->getMark(1,1) == players[player_index]->getMark()) winner_index = player_index;
+    //right-diag win condition check
+    if(this->getMark(0,2) == this->getMark(1,1) && this->getMark(1,1) == this->getMark(2,0) && this->getMark(1,1) == players[getPriorTurnHolderIndex()]->getMark()) winner_index = getPriorTurnHolderIndex();
+    //left-diag win condition check
+    else if(this->getMark(0,0) == this->getMark(1,1) && this->getMark(1,1) == this->getMark(2,2) && this->getMark(1,1) == players[getPriorTurnHolderIndex()]->getMark()) winner_index = getPriorTurnHolderIndex();
 
-        //iterating through board
-        for(int row=0; row < board.size() && winner_index == Gameboard::UNDECIDED ; row++){
-            //horizontal row win condition check
-            if(this->getMark(0,row) == this->getMark(1,row) && this->getMark(1,row) == this->getMark(2,row) && this->getMark(0,row) == players[player_index]->getMark()) winner_index = player_index;
+    int row = latest_move.y(), collumn = latest_move.x();
+    //horizontal row win condition check
+    if(this->getMark(0,row) == this->getMark(1,row) && this->getMark(1,row) == this->getMark(2,row) && this->getMark(0,row) == players[getPriorTurnHolderIndex()]->getMark()) winner_index = getPriorTurnHolderIndex();
 
-            //iterating through board (collumns in row)
-            for(int collumn=0; collumn < board[row].size() && winner_index == Gameboard::UNDECIDED; collumn++){
-                //vertical collumn win condition check
-                if(this->getMark(collumn,0) == this->getMark(collumn,1) && this->getMark(collumn,1) == this->getMark(collumn,2) && this->getMark(collumn,0) == players[player_index]->getMark()) winner_index = player_index;
+    //vertical collumn win condition check
+    if(this->getMark(collumn,0) == this->getMark(collumn,1) && this->getMark(collumn,1) == this->getMark(collumn,2) && this->getMark(collumn,0) == players[getPriorTurnHolderIndex()]->getMark()) winner_index = getPriorTurnHolderIndex();  
 
-                if(this->getMark(collumn,row) == MARKS[0]) blank_space_count++;
-            }          
-        }
-    }
-    if(winner_index == Gameboard::UNDECIDED && blank_space_count == 0) winner_index = Gameboard::STALEMATE;
+    //if a winner hasn't decided, but it's the last possible turn, call a stalemate
+    if(winner_index == Gameboard::UNDECIDED && getCurrentTurn() > 8) winner_index = Gameboard::STALEMATE;
+
 
     return winner_index;
 }
@@ -132,4 +127,20 @@ int Gameboard::getBoardWidth() const {
 }
 int Gameboard::getBoardHeight() const {
     return BOARD_HEIGHT;
+}
+
+Coord Gameboard::getLatestMove() const {
+    return latest_move;
+}
+
+int Gameboard::getPriorTurnHolderIndex() const {
+    int result = turn_holder_index - 1;
+
+    if(result < 0) result = players.size() - 1;
+
+    return result;
+}
+
+int Gameboard::getCurrentTurn() const {
+    return turn;
 }
