@@ -1,0 +1,26 @@
+0.2.3
+    additions:
+        alter command-line arguments
+            -theme, -solo, and -h become --theme, --solo, and --help respectively
+            add -t alias for --theme, e.g. '-t classic'
+            -d=<difficulty> and -solo merge into --solo <difficulty>
+    tweaks/fixes:
+        update printHelpMenu function to reflect recent changes
+    bugs:
+
+0.2.3
+    additions:
+
+    tweaks/fixes:
+        fixed bug 004.
+    bugs:
+
+0.2.2
+    additions:
+        vertical win-condition recognition for hard-difficulty AI
+
+    tweaks/fixes:
+
+    bugs:
+        004 - hard ai will attempt to take the other spot in a diag with two spaces occupied by the same player
+        even if there are no open spaces.

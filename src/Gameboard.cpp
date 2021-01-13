@@ -1,10 +1,10 @@
 #include "Gameboard.hpp"
 
-Gameboard::Gameboard(bool singleplayer, std::vector<char> theme):
+Gameboard::Gameboard(BoardSettings settings):
     BOARD_WIDTH(3),
     BOARD_HEIGHT(3),
-    SINGLEPLAYER(singleplayer),
-    MARKS(theme)
+    SINGLEPLAYER(settings.singleplayer),
+    MARKS(settings.theme)
 {
     //intialize board
     for(int row_i=0; row_i<BOARD_HEIGHT; row_i++){
@@ -17,7 +17,7 @@ Gameboard::Gameboard(bool singleplayer, std::vector<char> theme):
 
     //load players
     int human_player_qty = 2, cpu_player_qty=0;
-    if(singleplayer){
+    if(settings.singleplayer){
         human_player_qty = 1;
         cpu_player_qty = 1;
     }
@@ -27,7 +27,8 @@ Gameboard::Gameboard(bool singleplayer, std::vector<char> theme):
         players[i]->setMark(MARKS[i+1]);
     }
     for(int i=human_player_qty; i < human_player_qty+cpu_player_qty; i++){
-        players.push_back(std::make_unique<CpuPlayer>(this));
+        if(settings.difficulty == 1) players.push_back(std::make_unique<CpuPlayerHard>(this));
+        else players.push_back(std::make_unique<CpuPlayerEasy>(this));
         players[i]->setMark(MARKS[i+1]);
     }
 

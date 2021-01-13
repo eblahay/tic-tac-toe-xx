@@ -7,6 +7,8 @@ class Coord{
 
         void setX(int x);
         void setY(int y);
+        //function that alters coordinate values to match those of the src.
+        void copy(const Coord &src);
 
         int x() const ;
         int y() const ;

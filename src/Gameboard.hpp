@@ -7,9 +7,11 @@
 #include "Coord.hpp"
 #include "player.hpp"
 
+#include "BoardSettings.hpp"
+
 class Gameboard{
     public:
-        Gameboard(bool singleplayer=false, std::vector<char> theme={'0', '1', '2'});
+        Gameboard(BoardSettings settings);
 
         void changeTurn();
 

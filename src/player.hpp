@@ -34,9 +34,18 @@ class HumanPlayer: public PlayerBase{
         bool isCpu();
 };
 
-class CpuPlayer: public PlayerBase{
+class CpuPlayerEasy: public PlayerBase{
     public:
-        CpuPlayer(Gameboard* gameboard);
+        CpuPlayerEasy(Gameboard* gameboard);
+        
+        Coord pickDesCoord();
+
+        bool isCpu();
+};
+
+class CpuPlayerHard: public PlayerBase{
+    public:
+        CpuPlayerHard(Gameboard* gameboard);
         
         Coord pickDesCoord();
 
