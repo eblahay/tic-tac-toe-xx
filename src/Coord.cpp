@@ -21,3 +21,8 @@ void Coord::setX(int x){
 void Coord::setY(int y){
     _y = y;
 }
+
+void Coord::copy(const Coord &src){
+    setX(src._x);
+    setY(src._y);
+}

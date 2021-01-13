@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "BoardSettings.hpp"
 #include "Gameboard.hpp"
 
 int printHelpMenu();
@@ -15,27 +16,52 @@ int main(int argc, char* argv[]){
     srand(time(NULL));
 
     //initializing customizable members of gameboard
-    std::vector<char> gameboard_theme = {'_','X','O'};
-    bool singleplayer=false;
+    BoardSettings settings;
 
     //succeeding for loop parses command line for arguments
-    for(int i=0; i<argc; i++){
-        if(std::strcmp(argv[i], "-h")==0) return printHelpMenu();
-        else if(std::strcmp(argv[i], "-solo")==0 || std::strcmp(argv[i], "--singleplayer")==0){
-            singleplayer=true;
+    for(int i=1; i<argc; i++){
+        //std::cout << "i = " << i << "\nargv[i] = " << argv[i] << "\n\n";
+        if(std::strcmp(argv[i], "--help")==0) return printHelpMenu();
+        else if(std::strcmp(argv[i], "--solo")==0 || std::strcmp(argv[i], "--singleplayer")==0){
+            settings.singleplayer=true;
+            if(std::strcmp(argv[i+1], "hard")==0){
+                settings.difficulty = 1;
+                i++;
+            }
+            else if(std::strcmp(argv[i+1], "easy")==0){
+                settings.difficulty = 0;
+                i++;
+            }
+            else{
+                std::cout << "\033[31;1merror:\033[0m no difficulty specified.\n  type '--help' for a list of solo game difficulties.\n";
+                return 1;
+            }
+            
         }
-        else if(std::strncmp(argv[i], "-theme=", 7)==0){
-            if(std::strcmp(argv[i], "-theme=classic")==0) gameboard_theme = {'0','1','2'};
-            else if(std::strcmp(argv[i], "-theme=default")==0){
+        else if(std::strcmp(argv[i], "-t")==0 || std::strcmp(argv[i], "--theme")==0){
+            if(std::strcmp(argv[i+1], "classic")==0){
+                settings.theme = {'0','1','2'};
+                i++;
+            }
+            else if(std::strcmp(argv[i+1], "default")==0){
                 /*
                 since gameboard_theme is already intialized with the default theme,
                 nothing needs to be done here.
                 */
+                i++;
             }
+            else{
+                std::cout << "\033[31;1merror:\033[0m no theme specified.\n  type '--help' for a list of themes.\n";
+                return 1;
+            }
+        }
+        else{
+            std::cout << "\033[31;1merror:\033[0m unrecognized argument.\n  type '--help' for help.\n";
+            return 1; 
         }
     }
 
-    Gameboard gameboard(singleplayer, gameboard_theme);
+    Gameboard gameboard(settings);
 
     //event loop goes here
     gameboard.drawBoard();
@@ -66,14 +92,16 @@ int printHelpMenu(){
     */
 
     std::cout <<
-        " Tic-Tac-Toe++ α version 0.2 help menu\n" <<
+        " Tic-Tac-Toe++ α version 0.3 help menu\n" <<
         "---------------------------------------\n" <<
-        "     -h          ....prints this menu\n" <<
-        "     -theme=     ....sets the theme of the gameboard to the following value\n" <<
+        "     --help          ....prints this menu\n" <<
+        "     -t <theme>      ....sets the theme of the gameboard to <theme>\n" <<
+        "          -theme <theme>\n" <<
         "          default     ....the default theme\n" <<
         "          classic     ....the theme from version 0.0.3.0\n" <<
-        "     -solo       ....launches the program in singleplayer mode\n" <<
-        "          --singleplayer\n" <<
+        "     -solo <difficulty>       ....launches the program in singleplayer mode with <difficulty> difficulty\n" <<
+        "          --singleplayer <difficulty>\n" <<
+        "                                   valid difficulties: easy, hard\n" <<
         "---------------------------------------\n"
     ;
 
