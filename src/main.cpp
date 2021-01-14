@@ -8,7 +8,9 @@
 #include "BoardSettings.hpp"
 #include "Gameboard.hpp"
 
-int printHelpMenu();
+void printHelpMenu();
+
+inline std::string getVersion();
 
 int main(int argc, char* argv[]){
 
@@ -21,7 +23,10 @@ int main(int argc, char* argv[]){
     //succeeding for loop parses command line for arguments
     for(int i=1; i<argc; i++){
         //std::cout << "i = " << i << "\nargv[i] = " << argv[i] << "\n\n";
-        if(std::strcmp(argv[i], "--help")==0) return printHelpMenu();
+        if(std::strcmp(argv[i], "--help")==0){
+            printHelpMenu();
+            return 0;
+        }
         else if(std::strcmp(argv[i], "--solo")==0 || std::strcmp(argv[i], "--singleplayer")==0){
             settings.singleplayer=true;
             if(std::strcmp(argv[i+1], "hard")==0){
@@ -50,10 +55,22 @@ int main(int argc, char* argv[]){
                 */
                 i++;
             }
+            else if(argv[i+1][1] == ',' && argv[i+1][3] == ',' && std::string(argv[i+1]).size() == 5){
+                /*
+                this section allows the user to define a custom theme with a command line arg.
+                */
+                settings.theme = {argv[i+1][0], argv[i+1][2], argv[i+1][4]};
+
+                i++;
+            }
             else{
                 std::cout << "\033[31;1merror:\033[0m no theme specified.\n  type '--help' for a list of themes.\n";
                 return 1;
             }
+        }
+        else if(strcmp(argv[i], "--version")==0){
+            std::cout << "Tic-Tac-Toe++ version " << getVersion() << '\n';
+            return 0;
         }
         else{
             std::cout << "\033[31;1merror:\033[0m unrecognized argument.\n  type '--help' for help.\n";
@@ -85,25 +102,32 @@ int main(int argc, char* argv[]){
     return 0;
 }
 
-int printHelpMenu(){
+void printHelpMenu(){
     /*
     function that outputs a catalog of optional
     command-line arguments & their functions to the user to std::cout
     */
 
     std::cout <<
-        " Tic-Tac-Toe++ α version 0.3 help menu\n" <<
+        " Tic-Tac-Toe++ version 0.3 help menu\n" <<
+        "---------------------------------------\n" <<
+        "FORM: Tic-Tac-Toe++ [OPTION 1] [OPTION 2] ...etc.\n"<<
         "---------------------------------------\n" <<
         "     --help          ....prints this menu\n" <<
         "     -t <theme>      ....sets the theme of the gameboard to <theme>\n" <<
-        "          -theme <theme>\n" <<
-        "          default     ....the default theme\n" <<
-        "          classic     ....the theme from version 0.0.3.0\n" <<
+        "        --theme <theme>\n" <<
+        "                      default     ....the default theme\n" <<
+        "                      classic     ....the theme from version 0.0.3.0\n" <<
+        "                      X,Y,Z       ....defines a custom theme using X, Y and Z.\n" <<
+        "                           e.g. '-t -,A,B'\n" <<
         "     -solo <difficulty>       ....launches the program in singleplayer mode with <difficulty> difficulty\n" <<
-        "          --singleplayer <difficulty>\n" <<
-        "                                   valid difficulties: easy, hard\n" <<
+        "        --singleplayer <difficulty>\n" <<
+        "                      valid difficulties: easy, hard\n" <<
+        "     --version        ....prints the version of the program to the console\n" <<
         "---------------------------------------\n"
     ;
+}
 
-    return 0;
+inline std::string getVersion(){
+    return "0.3.0";
 }
