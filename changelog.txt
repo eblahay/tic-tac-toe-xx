@@ -1,11 +1,15 @@
-0.2.3
+1.0.0
     additions:
         alter command-line arguments
             -theme, -solo, and -h become --theme, --solo, and --help respectively
             add -t alias for --theme, e.g. '-t classic'
             -d=<difficulty> and -solo merge into --solo <difficulty>
+            --version, prints the program version to the console. (I really should've done this earlier.)
+        error and termination when an unknown argument is given to the program. (Also should've done this one earlier)
+
     tweaks/fixes:
-        update printHelpMenu function to reflect recent changes
+        update help menu to reflect recent changes
+
     bugs:
 
 0.2.3
@@ -13,12 +17,13 @@
 
     tweaks/fixes:
         fixed bug 004.
+
     bugs:
 
 0.2.2
     additions:
         vertical win-condition recognition for hard-difficulty AI
-
+        
     tweaks/fixes:
 
     bugs:

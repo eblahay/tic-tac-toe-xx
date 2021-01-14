@@ -109,9 +109,9 @@ void printHelpMenu(){
     */
 
     std::cout <<
-        " Tic-Tac-Toe++ version 0.3 help menu\n" <<
+        " Tic-Tac-Toe++ help menu\n" <<
         "---------------------------------------\n" <<
-        "FORM: Tic-Tac-Toe++ [OPTION 1] [OPTION 2] ...etc.\n"<<
+        "Usage: Tic-Tac-Toe++ [options]\n"<<
         "---------------------------------------\n" <<
         "     --help          ....prints this menu\n" <<
         "     -t <theme>      ....sets the theme of the gameboard to <theme>\n" <<
@@ -120,7 +120,7 @@ void printHelpMenu(){
         "                      classic     ....the theme from version 0.0.3.0\n" <<
         "                      X,Y,Z       ....defines a custom theme using X, Y and Z.\n" <<
         "                           e.g. '-t -,A,B'\n" <<
-        "     -solo <difficulty>       ....launches the program in singleplayer mode with <difficulty> difficulty\n" <<
+        "     --solo <difficulty>       ....launches the program in singleplayer mode with <difficulty> difficulty\n" <<
         "        --singleplayer <difficulty>\n" <<
         "                      valid difficulties: easy, hard\n" <<
         "     --version        ....prints the version of the program to the console\n" <<
@@ -129,5 +129,5 @@ void printHelpMenu(){
 }
 
 inline std::string getVersion(){
-    return "0.3.0";
+    return "1.0.0";
 }
