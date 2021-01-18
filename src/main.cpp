@@ -20,62 +20,76 @@ int main(int argc, char* argv[]){
     //initializing customizable members of gameboard
     BoardSettings settings;
 
-    //succeeding for loop parses command line for arguments
-    for(int i=1; i<argc; i++){
-        //std::cout << "i = " << i << "\nargv[i] = " << argv[i] << "\n\n";
-        if(std::strcmp(argv[i], "--help")==0){
-            printHelpMenu();
-            return 0;
-        }
-        else if(std::strcmp(argv[i], "--solo")==0 || std::strcmp(argv[i], "--singleplayer")==0){
-            settings.singleplayer=true;
-            if(std::strcmp(argv[i+1], "hard")==0){
-                settings.difficulty = 1;
-                i++;
+    try{
+        //succeeding for loop parses command line for arguments
+        for(int i=1; i<argc; i++){
+            //std::cout << "i = " << i << "\nargv[i] = " << argv[i] << "\n\n";
+            if(std::strcmp(argv[i], "--help")==0){
+                printHelpMenu();
+                return 0;
             }
-            else if(std::strcmp(argv[i+1], "easy")==0){
-                settings.difficulty = 0;
-                i++;
+            else if(std::strcmp(argv[i], "--solo")==0 || std::strcmp(argv[i], "--singleplayer")==0){
+                settings.singleplayer=true;
+                if(i+1 >= argc){
+                    throw std::runtime_error("\033[31;1merror:\033[0m no difficulty specified.\n  type '--help' for a list of solo game difficulties.");
+                }
+                else if(std::strcmp(argv[i+1], "hard")==0){
+                    settings.difficulty = 1;
+                    i++;
+                }
+                else if(std::strcmp(argv[i+1], "easy")==0){
+                    settings.difficulty = 0;
+                    i++;
+                }
+                else{
+                    throw std::runtime_error("\033[31;1merror:\033[0m no difficulty specified.\n  type '--help' for a list of solo game difficulties.");
+                }
+                
             }
-            else{
-                std::cout << "\033[31;1merror:\033[0m no difficulty specified.\n  type '--help' for a list of solo game difficulties.\n";
-                return 1;
-            }
-            
-        }
-        else if(std::strcmp(argv[i], "-t")==0 || std::strcmp(argv[i], "--theme")==0){
-            if(std::strcmp(argv[i+1], "classic")==0){
-                settings.theme = {'0','1','2'};
-                i++;
-            }
-            else if(std::strcmp(argv[i+1], "default")==0){
-                /*
-                since gameboard_theme is already intialized with the default theme,
-                nothing needs to be done here.
-                */
-                i++;
-            }
-            else if(argv[i+1][1] == ',' && argv[i+1][3] == ',' && std::string(argv[i+1]).size() == 5){
-                /*
-                this section allows the user to define a custom theme with a command line arg.
-                */
-                settings.theme = {argv[i+1][0], argv[i+1][2], argv[i+1][4]};
+            else if(std::strcmp(argv[i], "-t")==0 || std::strcmp(argv[i], "--theme")==0){
+                if(i+1 >= argc){
+                    throw std::runtime_error("\033[31;1merror:\033[0m no theme specified.\n  type '--help' for a list of themes.");
+                }
+                else if(std::strcmp(argv[i+1], "classic")==0){
+                    settings.theme = {'0','1','2'};
+                    settings.axis_labels = false;
+                    i++;
+                }
+                else if(std::strcmp(argv[i+1], "default")==0){
+                    /*
+                    since gameboard_theme is already intialized with the default theme,
+                    nothing needs to be done here.
+                    */
+                    i++;
+                }
+                else if(argv[i+1][1] == ',' && argv[i+1][3] == ',' && std::string(argv[i+1]).size() == 5){
+                    /*
+                    this section allows the user to define a custom theme with a command line arg.
+                    */
+                    settings.theme = {argv[i+1][0], argv[i+1][2], argv[i+1][4]};
 
-                i++;
+                    i++;
+                }
+                else{
+                    throw std::runtime_error("\033[31;1merror:\033[0m no theme specified.\n  type '--help' for a list of themes.");
+                }
+            }
+            else if(strcmp(argv[i], "--version")==0){
+                std::cout << "Tic-Tac-Toe++ version " << getVersion() << '\n';
+                return 0;
+            }
+            else if(strcmp(argv[i], "--credits")==0){
+                std::cout << "Author: Megatato\n";
+                return 0;
             }
             else{
-                std::cout << "\033[31;1merror:\033[0m no theme specified.\n  type '--help' for a list of themes.\n";
-                return 1;
+                throw std::runtime_error("\033[31;1merror:\033[0m unrecognized argument.\n  type '--help' for help.");
             }
         }
-        else if(strcmp(argv[i], "--version")==0){
-            std::cout << "Tic-Tac-Toe++ version " << getVersion() << '\n';
-            return 0;
-        }
-        else{
-            std::cout << "\033[31;1merror:\033[0m unrecognized argument.\n  type '--help' for help.\n";
-            return 1; 
-        }
+    }
+    catch(std::exception &err){
+        std::cerr << err.what() << '\n';
+        return 1;
     }
 
     Gameboard gameboard(settings);
@@ -124,10 +138,11 @@ void printHelpMenu(){
         "        --singleplayer <difficulty>\n" <<
         "                      valid difficulties: easy, hard\n" <<
         "     --version        ....prints the version of the program to the console\n" <<
+        "     --credits        ....prints developer credits to the console\n" <<
         "---------------------------------------\n"
     ;
 }
 
 inline std::string getVersion(){
-    return "1.0.0";
+    return "1.1.0";
 }

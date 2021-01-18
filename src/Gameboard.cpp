@@ -4,6 +4,7 @@ Gameboard::Gameboard(BoardSettings settings):
     BOARD_WIDTH(3),
     BOARD_HEIGHT(3),
     SINGLEPLAYER(settings.singleplayer),
+    AXIS_LABELS(settings.axis_labels),
     MARKS(settings.theme)
 {
     //intialize board
@@ -54,11 +55,20 @@ void Gameboard::drawBoard(){
     std::cout << "It's Player " << turn_holder_index + 1 << "'s turn!\n";
 
     for(int row=0; row<BOARD_HEIGHT; row++){
+        if(AXIS_LABELS) std::cout << BOARD_HEIGHT-row << " ";
         for(int width=0; width<BOARD_WIDTH; width++){
             std::cout << getMark(width, row);
+            if(AXIS_LABELS && width != BOARD_WIDTH - 1){
+                std::cout << "|";
+            }
         }
         std::cout << '\n';
     }
+    if(AXIS_LABELS) std::cout << "  ";
+    for(int width=0; AXIS_LABELS && width<BOARD_WIDTH; width++){
+        std::cout << width + 1 << ' ';
+    }
+    if(AXIS_LABELS) std::cout << '\n';
 }
 
 void Gameboard::handleTurn(){
@@ -71,6 +81,7 @@ void Gameboard::handleTurn(){
         catch(std::runtime_error err){
             new_claim.setX(-1);
             new_claim.setY(-1);
+            std::cout << "Type input in this form: 'x,y'\n";
         }
     }
     while(
