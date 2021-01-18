@@ -1,3 +1,21 @@
+1.1.0
+    additions:
+        axis labels for the board
+        vertical board space dividers
+        invalid input message
+
+    tweaks/fixes:
+
+    bugs:
+
+1.0.1
+    additions:
+
+    tweaks/fixes:
+        fixed bug 005
+
+    bugs:
+
 1.0.0
     additions:
         alter command-line arguments
@@ -11,6 +29,7 @@
         update help menu to reflect recent changes
 
     bugs:
+        005 - segementation fault when -t or --solo is the final argument
 
 0.2.3
     additions:

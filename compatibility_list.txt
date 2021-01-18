@@ -1,0 +1,3 @@
+PopOS 20.10
+Ubuntu 20.04
+Debian 10.7.0

@@ -47,7 +47,7 @@ class Gameboard{
         ;
     private:
         const int BOARD_WIDTH, BOARD_HEIGHT;
-        const bool SINGLEPLAYER;
+        const bool SINGLEPLAYER, AXIS_LABELS;
 
         Coord latest_move;
 

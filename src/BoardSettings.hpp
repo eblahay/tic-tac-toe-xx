@@ -4,7 +4,10 @@
 #include <vector>
 
 struct BoardSettings{
-    bool singleplayer = false;
+    bool
+        singleplayer = false,
+        axis_labels = true
+    ;
 
     int difficulty = 0;
 
