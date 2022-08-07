@@ -12,9 +12,14 @@ set(SOURCES
     src/validators.cxx
 )
 add_executable(tic-tac-toe-xx ${SOURCES})
+target_link_libraries(tic-tac-toe-xx Boost::program_options ncurses)
 
+find_package(Boost 1.74 COMPONENTS program_options REQUIRED)
+set(CURSES_NEED_NCURSES TRUE)
+find_package(Curses REQUIRED)
 
 # include directories must come AFTER the executable's been added
+#include_directories(include ${Boost_INCLUDE_DIR} ${CURSES_INCLUDE_DIRS})
 include_directories(include)
 
 
