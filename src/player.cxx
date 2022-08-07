@@ -1,10 +1,10 @@
-#include "player.hpp"
+#include <tic-tac-toe++/player.hxx>
 
 #include <exception>
 #include <stdlib.h>
 
-#include "Gameboard.hpp"
-#include "validators.hpp"
+#include <tic-tac-toe++/Gameboard.hxx>
+#include <tic-tac-toe++/validators.hxx>
 
 //PlayerBase
 PlayerBase::PlayerBase(Gameboard* gameboard):

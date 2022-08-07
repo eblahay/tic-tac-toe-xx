@@ -1,9 +1,8 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#pragma once
 
 #include <iostream>
 
-#include "Coord.hpp"
+#include <tic-tac-toe++/Coord.hxx>
 
 //forward decl to allow ptr to it in PlayerBase
 class Gameboard;
@@ -51,5 +50,3 @@ class CpuPlayerHard: public PlayerBase{
 
         bool isCpu();
 };
-
-#endif

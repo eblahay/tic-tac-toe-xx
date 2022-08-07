@@ -1,5 +1,4 @@
-#ifndef COORD_HPP
-#define COORD_HPP
+#pragma once
 
 class Coord{
     public:
@@ -16,5 +15,3 @@ class Coord{
     private:
         int _x, _y;
 };
-
-#endif

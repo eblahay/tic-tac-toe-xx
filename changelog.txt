@@ -1,20 +1,20 @@
+1.2.0 WIP
+    additions:
+
+    tweaks/fixes:
+        changed '--solo' to '-s'
+
+    bugs:
+ 
 1.1.0
     additions:
         axis labels for the board
         vertical board space dividers
         invalid input message
 
-    tweaks/fixes:
-
-    bugs:
-
 1.0.1
-    additions:
-
     tweaks/fixes:
         fixed bug 005
-
-    bugs:
 
 1.0.0
     additions:
@@ -32,19 +32,13 @@
         005 - segementation fault when -t or --solo is the final argument
 
 0.2.3
-    additions:
-
     tweaks/fixes:
         fixed bug 004.
-
-    bugs:
 
 0.2.2
     additions:
         vertical win-condition recognition for hard-difficulty AI
         
-    tweaks/fixes:
-
     bugs:
         004 - hard ai will attempt to take the other spot in a diag with two spaces occupied by the same player
         even if there are no open spaces.

@@ -1,6 +1,4 @@
 bin
+build
 .vscode
-test/bin
-test/src
-proj.sh
-proj.config
+.cache

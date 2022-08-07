@@ -1,13 +1,12 @@
-#ifndef GAMEBOARD_HPP
-#define GAMEBOARD_HPP
+#pragma once
 
 #include <vector>
 #include <memory>
 
-#include "Coord.hpp"
-#include "player.hpp"
+#include <tic-tac-toe++/Coord.hxx>
+#include <tic-tac-toe++/player.hxx>
 
-#include "BoardSettings.hpp"
+#include <tic-tac-toe++/BoardSettings.hxx>
 
 class Gameboard{
     public:
@@ -56,5 +55,3 @@ class Gameboard{
 
         int turn=0, turn_holder_index=0;
 };
-
-#endif

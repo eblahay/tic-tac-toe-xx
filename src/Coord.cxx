@@ -1,4 +1,4 @@
-#include "Coord.hpp"
+#include <tic-tac-toe++/Coord.hxx>
 
 Coord::Coord(int x, int y):
     _x(x),

@@ -1,4 +1,4 @@
-#include "Gameboard.hpp"
+#include <tic-tac-toe++/Gameboard.hxx>
 
 Gameboard::Gameboard(BoardSettings settings):
     BOARD_WIDTH(3),

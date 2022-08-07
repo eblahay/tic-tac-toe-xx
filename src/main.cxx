@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "BoardSettings.hpp"
-#include "Gameboard.hpp"
+#include <tic-tac-toe++/BoardSettings.hxx>
+#include <tic-tac-toe++/Gameboard.hxx>
 
 void printHelpMenu();
 
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
                 printHelpMenu();
                 return 0;
             }
-            else if(std::strcmp(argv[i], "--solo")==0 || std::strcmp(argv[i], "--singleplayer")==0){
+            else if(std::strcmp(argv[i], "-s")==0 || std::strcmp(argv[i], "--singleplayer")==0){
                 settings.singleplayer=true;
                 if(i+1 >= argc){
                     throw std::runtime_error("\033[31;1merror:\033[0m no difficulty specified.\n  type '--help' for a list of solo game difficulties.");
@@ -76,10 +76,6 @@ int main(int argc, char* argv[]){
             }
             else if(strcmp(argv[i], "--version")==0){
                 std::cout << "Tic-Tac-Toe++ version " << getVersion() << '\n';
-                return 0;
-            }
-            else if(strcmp(argv[i], "--credits")==0){
-                std::cout << "Author: Megatato\n";
                 return 0;
             }
             else{
@@ -134,15 +130,14 @@ void printHelpMenu(){
         "                      classic     ....the theme from version 0.0.3.0\n" <<
         "                      X,Y,Z       ....defines a custom theme using X, Y and Z.\n" <<
         "                           e.g. '-t -,A,B'\n" <<
-        "     --solo <difficulty>       ....launches the program in singleplayer mode with <difficulty> difficulty\n" <<
+        "     -s <difficulty>       ....launches the program in singleplayer mode with <difficulty> difficulty\n" <<
         "        --singleplayer <difficulty>\n" <<
         "                      valid difficulties: easy, hard\n" <<
         "     --version        ....prints the version of the program to the console\n" <<
-        "     --credits        ....prints developer credits to the console\n" <<
         "---------------------------------------\n"
     ;
 }
 
 inline std::string getVersion(){
-    return "1.1.0";
+    return "1.2.0";
 }

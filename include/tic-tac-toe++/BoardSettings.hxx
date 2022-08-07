@@ -1,5 +1,4 @@
-#ifndef BOARD_SETTINGS_HPP
-#define BOARD_SETTINGS_HPP
+#pragma once
 
 #include <vector>
 
@@ -13,5 +12,3 @@ struct BoardSettings{
 
     std::vector<char> theme = {'_','X','O'};
 };
-
-#endif

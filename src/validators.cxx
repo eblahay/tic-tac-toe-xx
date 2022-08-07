@@ -1,4 +1,4 @@
-#include "validators.hpp"
+#include <tic-tac-toe++/validators.hxx>
 
 bool validators::inputCoordValidator(std::string input){
     bool result = false;
