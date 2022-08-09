@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #include <tic-tac-toe++/Gameboard.hxx>
-#include <tic-tac-toe++/validators.hxx>
+#include <tic-tac-toe++/ui.hxx>
 
 //PlayerBase
 PlayerBase::PlayerBase(Gameboard* gameboard):
@@ -29,20 +29,7 @@ HumanPlayer::HumanPlayer(Gameboard* gameboard): PlayerBase::PlayerBase(gameboard
 }
 
 Coord HumanPlayer::pickDesCoord(){
-    Coord result;
-
-    std::string e;
-    std::getline(std::cin, e);
-
-    if(validators::inputCoordValidator(e)){
-        result.setX(std::stoi(e.substr(0, e.find(','))) - 1);
-        result.setY(gameboard->getBoardHeight() - std::stoi(e.substr(e.find(',')+1)));
-    }
-    else{
-        throw std::runtime_error("Invalid Input");
-    }
-
-    return result;
+    return txx::getCoord();
 }
 
 bool HumanPlayer::isCpu(){

@@ -1,5 +1,6 @@
 #include <cerrno>
 #include <iostream>
+#include <string>
 #include <vector>
 #include <cstring>
 #include <stdlib.h>
@@ -11,6 +12,7 @@
 
 #include <tic-tac-toe++/BoardSettings.hxx>
 #include <tic-tac-toe++/Gameboard.hxx>
+#include <tic-tac-toe++/ui.hxx>
 
 namespace po = boost::program_options;
 
@@ -60,7 +62,7 @@ int main(int argc, char* argv[]){
             }
             if(vm.count("theme")){
                 if(vm["theme"].as<std::string>() == "classic"){
-                    settings.theme = {'0','1','2'};
+                    settings.marks = {'0','1','2'};
                     settings.axis_labels = false;
                 }
                 else if(vm["theme"].as<std::string>() == "default"){
@@ -73,7 +75,7 @@ int main(int argc, char* argv[]){
                     /*
                     this section allows the user to define a custom theme with a command line arg.
                     */
-                    settings.theme = {vm["theme"].as<std::string>()[0], vm["theme"].as<std::string>()[2], vm["theme"].as<std::string>()[4]};
+                    settings.marks = {vm["theme"].as<std::string>()[0], vm["theme"].as<std::string>()[2], vm["theme"].as<std::string>()[4]};
                 }
                 else{
                     throw std::runtime_error("\033[31;1mError:\033[0m no theme specified.\n  type '--help' for a list of themes.");
@@ -82,24 +84,37 @@ int main(int argc, char* argv[]){
             // end of argument parsing
             Gameboard gameboard(settings);
 
+            initscr(); // start ncurses mode
+
+            noecho();
+            keypad(stdscr, true);
+            cbreak(); // line buffering disabled
+            curs_set(0); // make the cursor invisible
+
             //event loop goes here
-            gameboard.drawBoard();
+            txx::draw(gameboard);  
             do{
                 gameboard.handleTurn();
 
-                gameboard.drawBoard();
+                txx::draw(gameboard);
             }
             while(gameboard.findWinner() == Gameboard::UNDECIDED);
             
             int winner = gameboard.findWinner();
-            const char* EN_NUMBERS[2] = {"O N E", "T W O"};
+            const std::string EN_NUMBERS[2] = {"O N E", "T W O"};
 
             if(winner == Gameboard::STALEMATE){
-                std::cout << "  S T A L E M A T E  \n    no one wins...\n";
+                printw("  S T A L E M A T E  \n    no one wins...\n");
             }
             else{
-                std::cout << "  P L A Y E R  " << EN_NUMBERS[winner] << "  V I C T O R Y !\n";
+                printw("  P L A Y E R  ");
+                txx::printa(EN_NUMBERS[winner]);
+                printw("  V I C T O R Y !\n");
             }
+            
+            getch(); // wait for player input
+
+            endwin(); // end ncurses mode
         }
 
         return 0;

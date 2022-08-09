@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <array>
 
 struct BoardSettings{
     bool
@@ -10,5 +10,6 @@ struct BoardSettings{
 
     int difficulty = 0;
 
-    std::vector<char> theme = {'_','X','O'};
+    std::array<char, 3> marks = {' ','X','O'};
+    std::array<char, 3> axis_nums = {'1', '2', '3'};
 };

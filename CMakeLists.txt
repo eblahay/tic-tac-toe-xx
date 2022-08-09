@@ -9,7 +9,7 @@ set(SOURCES
     src/Coord.cxx
     src/Gameboard.cxx
     src/player.cxx
-    src/validators.cxx
+    src/ui.cxx
 )
 add_executable(tic-tac-toe-xx ${SOURCES})
 target_link_libraries(tic-tac-toe-xx Boost::program_options ncurses)

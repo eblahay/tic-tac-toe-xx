@@ -1,10 +1,12 @@
-1.2.0 WIP
-    additions:
+2.0.0 WIP
+    tweaks/fixes:
+        - switched command-line argument parsers
+        - altered help message
 
+
+1.2.0
     tweaks/fixes:
         changed '--solo' to '-s'
-
-    bugs:
  
 1.1.0
     additions:

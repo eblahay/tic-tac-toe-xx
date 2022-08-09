@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <array>
 #include <memory>
 
 #include <tic-tac-toe++/Coord.hxx>
@@ -15,8 +16,6 @@ class Gameboard{
         void changeTurn();
 
         void claimSpace(Coord position, int claimant);
-
-        void drawBoard();
 
         void handleTurn();
 
@@ -34,12 +33,17 @@ class Gameboard{
 
         Coord getLatestMove() const ;
 
+        const int& getTurnHolderIndex() const ;
+
         int getPriorTurnHolderIndex() const ;
 
         int getCurrentTurn() const ;
 
+        const bool& axisLabels() const ;
+
         //public non-function class members
-        const std::vector<char> MARKS;
+        const BoardSettings SETTINGS;
+        const std::array<char, 3> MARKS;
         constexpr static int
             UNDECIDED = -1,
             STALEMATE = -2
