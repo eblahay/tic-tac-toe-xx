@@ -1,4 +1,5 @@
 #include <cerrno>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -82,6 +83,12 @@ int main(int argc, char* argv[]){
                 }
             }
             // end of argument parsing
+
+            std::string conf_dir(getenv("HOME"));
+            conf_dir += "/.tic-tac-toe-xx";
+
+            //end of initialization
+
             Gameboard gameboard(settings);
 
             initscr(); // start ncurses mode
@@ -92,24 +99,31 @@ int main(int argc, char* argv[]){
             curs_set(0); // make the cursor invisible
 
             //event loop goes here
-            txx::draw(gameboard);  
+            txx::draw(gameboard);
+            int winner;  
             do{
                 gameboard.handleTurn();
 
                 txx::draw(gameboard);
+
+                winner = gameboard.findWinner();
             }
-            while(gameboard.findWinner() == Gameboard::UNDECIDED);
+            while(winner == Gameboard::UNDECIDED);
             
-            int winner = gameboard.findWinner();
             const std::string EN_NUMBERS[2] = {"O N E", "T W O"};
 
+            addch(' ');
+
             if(winner == Gameboard::STALEMATE){
-                printw("  S T A L E M A T E  \n    no one wins...\n");
+                addstr("S T A L E M A T E  \n    no one wins...\n");
             }
             else{
-                printw("  P L A Y E R  ");
-                txx::printa(EN_NUMBERS[winner]);
-                printw("  V I C T O R Y !\n");
+                txx::addStr(
+                    "P L A Y E R  " +
+                    EN_NUMBERS[winner] +
+                    "  V I C T O R Y !",
+                    A_BOLD | A_UNDERLINE
+                );
             }
             
             getch(); // wait for player input

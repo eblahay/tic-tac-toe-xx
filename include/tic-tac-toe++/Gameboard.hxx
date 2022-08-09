@@ -28,8 +28,8 @@ class Gameboard{
         char getMark(Coord position) const ;
         char getMark(int x, int y) const ;
 
-        int getBoardWidth() const ;
-        int getBoardHeight() const ;
+        const int& getBoardWidth() const ;
+        const int& getBoardHeight() const ;
 
         Coord getLatestMove() const ;
 
@@ -37,9 +37,7 @@ class Gameboard{
 
         int getPriorTurnHolderIndex() const ;
 
-        int getCurrentTurn() const ;
-
-        const bool& axisLabels() const ;
+        const int& getCurrentTurn() const ;
 
         //public non-function class members
         const BoardSettings SETTINGS;
@@ -50,7 +48,7 @@ class Gameboard{
         ;
     private:
         const int BOARD_WIDTH, BOARD_HEIGHT;
-        const bool SINGLEPLAYER, AXIS_LABELS;
+        const bool SINGLEPLAYER;
 
         Coord latest_move;
 

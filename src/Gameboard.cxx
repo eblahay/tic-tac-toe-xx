@@ -6,7 +6,6 @@ Gameboard::Gameboard(BoardSettings settings):
     BOARD_WIDTH(3),
     BOARD_HEIGHT(3),
     SINGLEPLAYER(settings.singleplayer),
-    AXIS_LABELS(settings.axis_labels),
     MARKS(settings.marks),
     SETTINGS(settings)
 {
@@ -60,7 +59,6 @@ void Gameboard::handleTurn(){
         catch(std::runtime_error err){
             new_claim.setX(-1);
             new_claim.setY(-1);
-            printw("Type input in this form: 'x,y'\n");
         }
     }
     while(
@@ -80,7 +78,7 @@ int Gameboard::findWinner(){
     */
 
     int
-        winner_index = Gameboard::UNDECIDED// -1 = no_current_winner, -2 = stalemate
+        winner_index = UNDECIDED// -1 = no_current_winner, -2 = stalemate
     ;    
 
     //right-diag win condition check
@@ -96,7 +94,7 @@ int Gameboard::findWinner(){
     if(this->getMark(collumn,0) == this->getMark(collumn,1) && this->getMark(collumn,1) == this->getMark(collumn,2) && this->getMark(collumn,0) == players[getPriorTurnHolderIndex()]->getMark()) winner_index = getPriorTurnHolderIndex();  
 
     //if a winner hasn't decided, but it's the last possible turn, call a stalemate
-    if(winner_index == Gameboard::UNDECIDED && getCurrentTurn() > 8) winner_index = Gameboard::STALEMATE;
+    if(winner_index == UNDECIDED && getCurrentTurn() > 8) winner_index = STALEMATE;
 
 
     return winner_index;
@@ -113,10 +111,10 @@ char Gameboard::getMark(int x, int y) const {
     return board[y][x];
 }
 
-int Gameboard::getBoardWidth() const {
+const int& Gameboard::getBoardWidth() const {
     return BOARD_WIDTH;
 }
-int Gameboard::getBoardHeight() const {
+const int& Gameboard::getBoardHeight() const {
     return BOARD_HEIGHT;
 }
 
@@ -136,10 +134,6 @@ int Gameboard::getPriorTurnHolderIndex() const {
     return result;
 }
 
-int Gameboard::getCurrentTurn() const {
+const int& Gameboard::getCurrentTurn() const {
     return turn;
-}
-
-const bool& Gameboard::axisLabels() const {
-    return AXIS_LABELS;
 }

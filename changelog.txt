@@ -2,6 +2,9 @@
     tweaks/fixes:
         - switched command-line argument parsers
         - altered help message
+    bugs:
+        - when submitting a set of coordinates that are already occupied,
+          the coordinate selection gui will move down by one row
 
 
 1.2.0
