@@ -151,6 +151,8 @@ Coord txx::getCoord(WINDOW* win){
 
     move(START_Y, LINE_START);
     for(int col=0; col < getmaxx(win); col++) addch(' ');
+    
+    move(START_Y, LINE_START); // fixes bug #0
 
     return Coord(x, y);
 }
