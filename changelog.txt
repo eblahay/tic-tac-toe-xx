@@ -1,8 +1,8 @@
-2.0.0 WIP
+2.0.0
     tweaks/fixes:
         - switched command-line argument parsers
         - altered help message
-
+        - radically altered user-interface
 
 1.2.0
     tweaks/fixes:
