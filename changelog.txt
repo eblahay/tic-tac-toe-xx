@@ -3,6 +3,7 @@
         - switched command-line argument parsers
         - altered help message
         - radically altered user-interface
+            - (this includes a new input system, which ISN'T compatible with old test files)
 
 1.2.0
     tweaks/fixes:
