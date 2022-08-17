@@ -100,6 +100,7 @@ Coord txx::getCoord(const Gameboard* gb, WINDOW* win){
 
         // process input
         switch (c) {
+            case KEY_ENTER:
             case '\n':
                 selecting = false;
                 break;
@@ -129,6 +130,7 @@ Coord txx::getCoord(const Gameboard* gb, WINDOW* win){
                 break;
 
             default:
+
                 break;
         }
     }
