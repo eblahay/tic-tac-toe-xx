@@ -15,12 +15,24 @@ void txx::addStr(std::string a, attr_t attr){
 }
 
 void txx::draw(const Gameboard& gb){
+    // draw playerlist
     move(0,0);
-    addstr("It's ");
-    addStr("Player " + std::to_string(gb.getTurnHolderIndex()+1), A_BOLD);
-    addstr("'s turn!");
-    move(2,0);
+    for(int i=0; i<2; i++){
+        std::string ln;
+        ln.push_back(' ');
+        ln.push_back(gb.SETTINGS.marks[i+1]);
+        ln.push_back(' ');
+        ln += "Player " + std::to_string(i+1);
+        ln.push_back(' ');
+        
+        if(i == gb.getTurnHolderIndex()) addStr(ln, A_REVERSE);
+        else addStr(ln);
+
+        move(getcury(stdscr)+1,0);
+    }
     
+    // draw board
+    move(3,0);
     for(int row=0; row<gb.getBoardHeight(); row++){
         if(gb.SETTINGS.axis_labels){
             addch(gb.SETTINGS.axis_nums[gb.getBoardHeight()-row-1] | A_DIM);
