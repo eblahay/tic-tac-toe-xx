@@ -140,5 +140,5 @@ int main(int argc, char* argv[]){
 }
 
 inline std::string getVersion(){
-    return "2.0.0";
+    return "2.1.0";
 }

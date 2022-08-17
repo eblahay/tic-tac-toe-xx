@@ -1,3 +1,7 @@
+2.1.0 WIP
+    features:
+        - new playerlist in place of "It's <PLAYER>'s Turn!" Statement
+
 2.0.0
     tweaks/fixes:
         - switched command-line argument parsers
