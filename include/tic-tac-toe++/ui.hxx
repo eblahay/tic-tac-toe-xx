@@ -21,5 +21,5 @@ namespace txx {
     void moveDn(int d=1, WINDOW* win=stdscr);
 
     // prompt player to enter information returned as a Coord
-    Coord getCoord(WINDOW* win=stdscr);
+    Coord getCoord(const Gameboard* gb, WINDOW* win=stdscr);
 }

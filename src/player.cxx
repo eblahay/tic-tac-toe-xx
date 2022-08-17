@@ -29,7 +29,7 @@ HumanPlayer::HumanPlayer(Gameboard* gameboard): PlayerBase::PlayerBase(gameboard
 }
 
 Coord HumanPlayer::pickDesCoord(){
-    return txx::getCoord();
+    return txx::getCoord(gameboard);
 }
 
 bool HumanPlayer::isCpu(){

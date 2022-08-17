@@ -74,97 +74,64 @@ void txx::moveDn(int d, WINDOW* win){
     move(getcury(win) + d, getcurx(win));
 }
 
-Coord txx::getCoord(WINDOW* win){
-    int x=0, y=0;
-    const int 
-        LINE_START=getcurx(win),
-        START_Y=getcury(win)
-    ;
+Coord txx::getCoord(const Gameboard* gb, WINDOW* win){
+    int x=1, y=1; // initial coordinate selection
 
-    bool getting_input=true;
-    while(getting_input){
-        curs_set(1); // make cursor visible
-        echo();
+    const int BOARD_Y = 3;
 
-        while((x > '3' || x < '1') || (y > '3' || y < '1')){
-            move(START_Y, LINE_START);
-            addstr("X: _ Y: _");
-            for(int i=9; i<21; i++) addch(' ');
+    bool selecting = true;
+    while(selecting){
+        // move to and highlight selected space onscreen
+        if(!gb->SETTINGS.axis_labels) move(BOARD_Y + y, x);
+        else{
+            move(BOARD_Y + y, (x * 2) + 2);
 
-            moveX(LINE_START + 3);
-            x = getch();
-
-            moveX(LINE_START + 8);
-            y = getch();
+            if(y != 2) attron(A_UNDERLINE);
+            else attroff(A_UNDERLINE);
         }
-        
-        moveX(LINE_START);
-        std::string
-            coordinate_str = {'(',(char)x,',',(char)y,')'},
-            prefix = "Select Space ",
-            optstr[2] = {"Yes", "No"},
-            optstr_key[2] = {"ENTER", "N"};
-        ;
-        addStr(prefix);
-        addStr(coordinate_str, A_BOLD);
-        addch('?');
-        moveDn();
-        moveX(LINE_START);
-        addStr(optstr[0] + " [" + optstr_key[0] + "]");
-        move(getcury(stdscr)+1, LINE_START);
-        addStr(optstr[1] + " [" + optstr_key[1] + "]");
+        addch(gb->getMark(x, y) | A_REVERSE);
 
-        curs_set(0); // make cursor invisible again
-        noecho();
+        // collect input
+        int c = getch();
 
-        bool b=true;
-        while(b){
-            int yn = getch();
-            switch (yn) {
-                case '\n':
-                case KEY_ENTER:
-                    getting_input = false;
-                    x -= '1';
-                    y -= '1';
-                    y = 2 - y;
+        // un-highlight selected space onscreen
+        moveX(getcurx(win)-1);
+        addch(gb->getMark(x, y));
 
-                    b=false;
-                    moveX(LINE_START);
-                    for(int i=0; i < optstr[1].size() + optstr_key[1].size() + 3; i++){
-                        addch(' ');
-                    }
-                    moveDn(-1);
-                    moveX(LINE_START);
-                    for(int i=0; i < optstr[0].size() + optstr_key[0].size() + 3; i++){
-                        addch(' ');
-                    }
+        // process input
+        switch (c) {
+            case '\n':
+                selecting = false;
+                break;
+            
+            case KEY_UP:
+            case 'W':
+            case 'w':
+                if(y-1 >= 0) y--;
+                break;
 
-                    break;
-                case 'n':
-                case 'N':
-                    x = 0;
-                    y = 0;
+            case KEY_DOWN:
+            case 'S':
+            case 's':
+                if(y+1 < 3) y++;
+                break;
 
-                    b=false;
-                    moveX(LINE_START);
-                    for(int i=0; i < optstr[1].size() + optstr_key[1].size() + 3; i++){
-                        addch(' ');
-                    }
-                    moveDn(-1);
-                    moveX(LINE_START);
-                    for(int i=0; i < optstr[0].size() + optstr_key[0].size() + 3; i++){
-                        addch(' ');
-                    }
+            case KEY_LEFT:
+            case 'A':
+            case 'a':
+                if(x-1 >= 0) x--;
+                break;
 
-                    break;
-            }
+            case KEY_RIGHT:
+            case 'D':
+            case 'd':
+                if(x+1 < 3) x++;
+                break;
+
+            default:
+                break;
         }
     }
-
-    move(START_Y, LINE_START);
-    for(int col=0; col < getmaxx(win); col++) addch(' ');
-    
-    move(START_Y, LINE_START); // fixes bug #0
 
     return Coord(x, y);
 }
