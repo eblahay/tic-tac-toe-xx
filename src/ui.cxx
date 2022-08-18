@@ -22,7 +22,7 @@ void txx::draw(const Gameboard& gb){
         ln.push_back(' ');
         ln.push_back(gb.SETTINGS.marks[i+1]);
         ln.push_back(' ');
-        ln += "Player " + std::to_string(i+1);
+        ln += gb.SETTINGS.plyr_names[i];
         ln.push_back(' ');
         
         if(i == gb.getTurnHolderIndex()) addStr(ln, A_REVERSE);

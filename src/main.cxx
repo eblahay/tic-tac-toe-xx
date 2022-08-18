@@ -1,3 +1,4 @@
+#include <boost/program_options/value_semantic.hpp>
 #include <cerrno>
 #include <cstdlib>
 #include <iostream>
@@ -35,6 +36,8 @@ int main(int argc, char* argv[]){
             ("version", "prints program version information")
             ("solo,s", po::value<std::string>(),"launches the program in singleplayer mode with the selected difficulty\n  valid difficulties: easy, hard")
             ("theme,t", po::value<std::string>(),"sets the theme of the gameboard\n  - default     ....the default theme\n  - classic     ....the theme from version 0.0.3.0\n  - X,Y,Z       ....defines a custom theme using X, Y and Z\n    e.g. '-t -,A,B'")
+            ("p1", po::value<std::string>(), "sets the name of Player 1")
+            ("p2", po::value<std::string>(), "sets the name of Player 2")
         ;
 
         po::variables_map vm;
@@ -58,13 +61,23 @@ int main(int argc, char* argv[]){
                 settings.singleplayer=true;
                 if(vm["solo"].as<std::string>() == "hard"){
                     settings.difficulty = 1;
+                    settings.plyr_names[1] = "Hardy";
                 }
                 else if(vm["solo"].as<std::string>() == "easy"){
                     settings.difficulty = 0;
+                    settings.plyr_names[1] = "Simple";
                 }
                 else{
                     throw std::runtime_error("\033[31;1mError:\033[0m no difficulty specified.\n  type '--help' for a list of solo game difficulties.");
                 }
+
+                settings.plyr_names[1] += "CPU";
+            }
+            else if(vm.count("p2")){
+                // The CPU Player's gonna have its own name; don't want
+                // the player setting that manually!
+
+                settings.plyr_names[1] = vm["p2"].as<std::string>();
             }
             if(vm.count("theme")){
                 if(vm["theme"].as<std::string>() == "classic"){
@@ -86,6 +99,9 @@ int main(int argc, char* argv[]){
                 else{
                     throw std::runtime_error("\033[31;1mError:\033[0m no theme specified.\n  type '--help' for a list of themes.");
                 }
+            }
+            if(vm.count("p1")){
+                settings.plyr_names[0] = vm["p1"].as<std::string>();
             }
             // end of argument parsing
 
@@ -114,19 +130,18 @@ int main(int argc, char* argv[]){
                 winner = gameboard.findWinner();
             }
             while(winner == Gameboard::UNDECIDED);
-            
-            const std::string EN_NUMBERS[2] = {"O N E", "T W O"};
 
-            addch(' ');
+            txx::moveX(1);
 
             if(winner == Gameboard::STALEMATE){
-                addstr("S T A L E M A T E  \n    no one wins...\n");
+                addstr("S T A L E M A T E");
+                move(getcury(stdscr)+1, 2);
+                addstr("no one wins...");
             }
             else{
                 txx::addStr(
-                    "P L A Y E R  " +
-                    EN_NUMBERS[winner] +
-                    "  V I C T O R Y !",
+                    settings.plyr_names[winner] + 
+                    "'s  V I C T O R Y !",
                     A_BOLD | A_UNDERLINE
                 );
             }
