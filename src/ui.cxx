@@ -32,7 +32,9 @@ void txx::draw(const Gameboard& gb){
     }
     
     // draw board
-    move(3,0);
+    const int BOARD_Y = 3, BOARD_X = 2;
+
+    move(BOARD_Y,BOARD_X);
     for(int row=0; row<gb.getBoardHeight(); row++){
         if(gb.SETTINGS.axis_labels){
             addch(gb.SETTINGS.axis_nums[gb.getBoardHeight()-row-1] | A_DIM);
@@ -49,7 +51,7 @@ void txx::draw(const Gameboard& gb){
             }
             else addch(gb.getMark(width, row));
         }
-        move(getcury(stdscr)+1, 0);
+        move(getcury(stdscr)+1, BOARD_X);
     }
     if(gb.SETTINGS.axis_labels){
         addstr("  ");
@@ -58,10 +60,10 @@ void txx::draw(const Gameboard& gb){
             addch(gb.SETTINGS.axis_nums[width] | A_DIM);
             addch(' ');
         }
-        move(getcury(stdscr)+1, 0);
+        move(getcury(stdscr)+1, BOARD_X);
     }
 
-    move(getcury(stdscr)+1, 0);
+    move(getcury(stdscr)+1, BOARD_X);
 
     refresh();
 }
@@ -77,14 +79,14 @@ void txx::moveDn(int d, WINDOW* win){
 Coord txx::getCoord(const Gameboard* gb, WINDOW* win){
     int x=1, y=1; // initial coordinate selection
 
-    const int BOARD_Y = 3;
+    const int BOARD_Y = 3, BOARD_X = 2;
 
     bool selecting = true;
     while(selecting){
         // move to and highlight selected space onscreen
-        if(!gb->SETTINGS.axis_labels) move(BOARD_Y + y, x);
+        if(!gb->SETTINGS.axis_labels) move(BOARD_Y + y, BOARD_X + x);
         else{
-            move(BOARD_Y + y, (x * 2) + 2);
+            move(BOARD_Y + y, BOARD_X + (x * 2) + 2);
 
             if(y != 2) attron(A_UNDERLINE);
             else attroff(A_UNDERLINE);
@@ -102,6 +104,7 @@ Coord txx::getCoord(const Gameboard* gb, WINDOW* win){
 
         // process input
         switch (c) {
+            case ' ':
             case KEY_ENTER:
             case '\n':
                 selecting = false;
@@ -132,7 +135,6 @@ Coord txx::getCoord(const Gameboard* gb, WINDOW* win){
                 break;
 
             default:
-
                 break;
         }
     }

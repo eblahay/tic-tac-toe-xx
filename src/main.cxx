@@ -42,7 +42,12 @@ int main(int argc, char* argv[]){
         po::notify(vm);
 
         if(vm.count("help")){
-            std::cout << "Usage: " << program_invocation_short_name << " [ options ... ]\n" << cmdln_opts << '\n';
+            std::cout << 
+                "Usage: " << program_invocation_short_name <<
+                " [ options ... ]\n" << cmdln_opts << 
+                "\nControls:\n  Movement:  ARROW KEYS or WASD\n" <<
+                "  Confirm:  [ENTER] or [SPACE]" <<
+                '\n';
         }
         else if(vm.count("version")){
             std::cout << "Tic-Tac-Toe++ " << getVersion() << '\n';
