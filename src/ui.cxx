@@ -98,6 +98,8 @@ Coord txx::getCoord(const Gameboard* gb, WINDOW* win){
         moveX(getcurx(win)-1);
         addch(gb->getMark(x, y));
 
+        attroff(A_UNDERLINE); // turn off underline
+
         // process input
         switch (c) {
             case KEY_ENTER:
