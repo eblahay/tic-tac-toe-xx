@@ -7,15 +7,11 @@
 #include <tic-tac-toe++/ui.hxx>
 
 //PlayerBase
-PlayerBase::PlayerBase(Gameboard* gameboard):
+PlayerBase::PlayerBase(Gameboard* gameboard, char mark):
     gameboard(gameboard),
-    mark('?')
+    mark(mark)
 {
     
-}
-
-void PlayerBase::setMark(char mark){
-    this->mark = mark;
 }
 
 char PlayerBase::getMark(){
@@ -24,7 +20,7 @@ char PlayerBase::getMark(){
 
 //HumanPlayer
 
-HumanPlayer::HumanPlayer(Gameboard* gameboard): PlayerBase::PlayerBase(gameboard){
+HumanPlayer::HumanPlayer(Gameboard* gameboard, char mark): PlayerBase::PlayerBase(gameboard, mark){
     
 }
 
@@ -38,7 +34,7 @@ bool HumanPlayer::isCpu(){
 
 //CpuPlayerEasy
 
-CpuPlayerEasy::CpuPlayerEasy(Gameboard* gameboard): PlayerBase::PlayerBase(gameboard){
+CpuPlayerEasy::CpuPlayerEasy(Gameboard* gameboard, char mark): PlayerBase::PlayerBase(gameboard, mark){
     
 }
 
@@ -55,7 +51,7 @@ bool CpuPlayerEasy::isCpu(){
 
 //CpuPlayerHard
 
-CpuPlayerHard::CpuPlayerHard(Gameboard* gameboard): PlayerBase::PlayerBase(gameboard){
+CpuPlayerHard::CpuPlayerHard(Gameboard* gameboard, char mark): PlayerBase::PlayerBase(gameboard, mark){
     
 }
 

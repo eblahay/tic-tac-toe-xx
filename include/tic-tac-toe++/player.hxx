@@ -10,13 +10,11 @@ class Gameboard;
 
 class PlayerBase{
     public:
-        PlayerBase(Gameboard* gameboard);
+        PlayerBase(Gameboard* gameboard, char mark);
 
         virtual Coord pickDesCoord() = 0;
 
         virtual bool isCpu() = 0;
-
-        void setMark(char mark);
 
         char getMark();
  protected:
@@ -26,7 +24,7 @@ class PlayerBase{
 
 class HumanPlayer: public PlayerBase{
     public:
-        HumanPlayer(Gameboard* gameboard);
+        HumanPlayer(Gameboard* gameboard, char mark);
         
         Coord pickDesCoord();
 
@@ -35,7 +33,7 @@ class HumanPlayer: public PlayerBase{
 
 class CpuPlayerEasy: public PlayerBase{
     public:
-        CpuPlayerEasy(Gameboard* gameboard);
+        CpuPlayerEasy(Gameboard* gameboard, char mark);
         
         Coord pickDesCoord();
 
@@ -44,7 +42,7 @@ class CpuPlayerEasy: public PlayerBase{
 
 class CpuPlayerHard: public PlayerBase{
     public:
-        CpuPlayerHard(Gameboard* gameboard);
+        CpuPlayerHard(Gameboard* gameboard, char mark);
         
         Coord pickDesCoord();
 

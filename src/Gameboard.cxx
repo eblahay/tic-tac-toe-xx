@@ -26,13 +26,11 @@ Gameboard::Gameboard(BoardSettings settings):
     }
 
     for(int i=0; i < human_player_qty; i++){
-        players.push_back(std::make_unique<HumanPlayer>(this));
-        players[i]->setMark(MARKS[i+1]);
+        players.push_back(std::make_unique<HumanPlayer>(this, MARKS[i+1]));
     }
     for(int i=human_player_qty; i < human_player_qty+cpu_player_qty; i++){
-        if(settings.difficulty == 1) players.push_back(std::make_unique<CpuPlayerHard>(this));
-        else players.push_back(std::make_unique<CpuPlayerEasy>(this));
-        players[i]->setMark(MARKS[i+1]);
+        if(settings.difficulty == 1) players.push_back(std::make_unique<CpuPlayerHard>(this, MARKS[i+1]));
+        else players.push_back(std::make_unique<CpuPlayerEasy>(this, MARKS[i+1]));
     }
 
 }
