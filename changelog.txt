@@ -1,7 +1,8 @@
-2.1.0 WIP
+3.0.0
     features:
         - new playerlist in place of "It's <PLAYER>'s Turn!" Statement
         - custom player names
+        - even MORE radically altered user input system
 
 2.0.0
     tweaks/fixes:
